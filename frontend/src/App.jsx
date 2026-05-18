@@ -5,10 +5,13 @@ export default function App() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [cart, setCart] = useState([]);
 
-  // Fetch menu data from our Node.js backend on port 5000
+  // 🎯 FIX 1: Point to the explicit '/api/menu' endpoint path
   useEffect(() => {
-    fetch('http://localhost:5000/api/menu')
-      .then((res) => res.json())
+    fetch('https://restaurant-api-wpsm.onrender.com/api/menu')
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response error");
+        return res.json();
+      })
       .then((data) => setMenu(data))
       .catch((err) => console.error("Error fetching menu data:", err));
   }, []);
@@ -146,7 +149,7 @@ export default function App() {
                   <span>${totalWithTax.toFixed(2)}</span>
                 </div>
                 
-                {/* 🚀 SEND LIVE ORDER TO BACKEND */}
+                {/* SEND LIVE ORDER TO BACKEND */}
                 <button 
                   onClick={() => {
                     const orderPayload = {
@@ -154,31 +157,4 @@ export default function App() {
                       totalAmount: parseFloat(totalWithTax.toFixed(2))
                     };
 
-                    fetch('http://localhost:5000/api/orders', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(orderPayload)
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                      alert(`🎉 Order saved to MongoDB Cloud! Order ID: ${data.orderId}`);
-                      setCart([]); // Clear shopping cart
-                    })
-                    .catch(err => {
-                      console.error("Order processing error:", err);
-                      alert("Failed to reach server backend.");
-                    });
-                  }}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl shadow-sm transition-colors mt-4 text-center block text-sm"
-                >
-                  Confirm Order
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-
-      </main>
-    </div>
-  );
-}
+                    // 🎯 FIX 2: Point to the explicit '/api/orders'
