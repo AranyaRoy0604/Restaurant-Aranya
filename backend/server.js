@@ -1,3 +1,4 @@
+import 'dotenv/config'; // 👈 🎯 CRITICAL: Must be the absolute first line to load variables!
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -15,8 +16,9 @@ app.use(express.json());
 
 // 🔌 MONGODB CONNECTION SETUP
 const MONGO_URI = process.env.MONGO_URI;
+
 if (!MONGO_URI) {
-  console.error("❌ ERROR: MONGO_URI environment variable is missing!");
+  console.error("❌ ERROR: MONGO_URI variable is undefined! Check your local .env file or Render settings.");
 }
 
 mongoose.connect(MONGO_URI)
@@ -83,9 +85,8 @@ app.get('/api/menu', async (req, res) => {
         { name: 'Fresh Mint Lemonade', category: 'Drinks', price: 3.50, image: '🍹', desc: 'Freshly squeezed lemons with muddled mint leaves.' }
       ];
       
-      // Save items permanently into your real cloud collection
       await MenuItem.insertMany(expandedMenu);
-      menuItems = await MenuItem.find(); // Re-fetch the items to send back
+      menuItems = await MenuItem.find(); 
     }
     
     res.json(menuItems); 
