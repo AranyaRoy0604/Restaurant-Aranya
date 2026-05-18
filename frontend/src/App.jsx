@@ -7,7 +7,7 @@ export default function App() {
 
   // Fetch menu data from our Node.js backend on port 5000
   useEffect(() => {
-    fetch('http://localhost:5000/api/menu')
+    fetch('https://restaurant-api-wpsm.onrender.com/api/menu')
       .then((res) => res.json())
       .then((data) => setMenu(data))
       .catch((err) => console.error("Error fetching menu data:", err));
@@ -154,7 +154,7 @@ export default function App() {
                       totalAmount: parseFloat(totalWithTax.toFixed(2))
                     };
 
-                    fetch('http://localhost:5000/api/orders', {
+                    fetch('https://restaurant-api-wpsm.onrender.com/api/orders', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify(orderPayload)
